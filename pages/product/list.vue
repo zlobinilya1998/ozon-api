@@ -2,7 +2,8 @@
   <div>
     <v-progress-circular indeterminate v-if='loading'/>
     <div v-else-if='list.length > 0'>
-      <div v-for='item in list' @click='gotoProduct(item.product_id)'>{{item}}</div>
+      <h3 class='mb-3'>Артикулы</h3>
+      <v-btn v-for='item in list' @click='gotoProduct(item.product_id)' :key='item.product_id' class='mr-2' color='primary'>{{item.product_id}}</v-btn>
     </div>
   </div>
 </template>

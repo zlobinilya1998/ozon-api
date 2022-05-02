@@ -1,5 +1,9 @@
 # ozon-api
 
+### For correct work App requires two env variables
+1) Ozon_api_key - your ozon api key
+2) Ozon_client_id - your ozon client id
+
 ## Build Setup
 
 ```bash

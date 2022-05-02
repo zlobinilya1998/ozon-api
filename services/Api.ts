@@ -8,7 +8,7 @@ const headers: any = {
 
 const Api = axios.create({
   baseURL: 'https://api-seller.ozon.ru/',
-  timeout: 1000,
+  timeout: 30_000,
   headers,
 });
 
