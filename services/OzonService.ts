@@ -24,4 +24,9 @@ export default class OzonService {
     const { data } = await Api.post('v2/product/list');
     return data.result.items;
   }
+
+  static async getCategoryById(id: string){
+    const { data } = await Api.post('v2/category/tree',{ category_id: id });
+    return data.result;
+  }
 }

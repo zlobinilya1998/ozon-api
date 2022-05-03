@@ -80,5 +80,14 @@ export default {
       title: 'Vuetify.js',
     }
   },
+  methods: {
+    checkEnv(){
+      const env = this.$nuxt.context.env;
+      if (!env.client_id || !env.api_key) alert('client_id or api_key not provided on .env file')
+    }
+  },
+  mounted() {
+    this.checkEnv();
+  }
 }
 </script>

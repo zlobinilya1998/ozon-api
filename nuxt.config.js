@@ -10,7 +10,7 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - ozon-api',
+    titleTemplate: '%s',
     title: 'ozon-api',
     htmlAttrs: {
       lang: 'en',

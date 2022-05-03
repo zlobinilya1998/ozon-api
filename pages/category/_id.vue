@@ -1,9 +1,13 @@
 <template>
   <div>
-    <h3 class='mb-2'>Все категории</h3>
+    <v-btn class='mb-4' v-if='$route.params.id' @click='$router.go(-1)'>
+      <v-icon>mdi-arrow-left</v-icon>
+      Назад
+    </v-btn>
+    <h3 v-html='category.title' class='mb-2'/>
     <v-data-table
       :headers='table.headers'
-      :items='categories'
+      :items='category.children'
       :loading='loading'
       :items-per-page='15'
       class='elevation-1'
@@ -13,10 +17,7 @@
 </template>
 
 <script>
-import Category from '~/components/Category'
-
 export default {
-  components: { Category },
   data: () => ({
     loading: false,
     table: {
@@ -37,30 +38,28 @@ export default {
           value: 'children.length'
         },
       ]
-    }
+    },
+    category: {},
   }),
-  computed: {
-    categories() {
-      return this.$store.state.products.categories
-    }
-  },
-  methods: {
-    async getCategories() {
-      this.loading = true
-      await this.$store.dispatch('products/getCategories')
-      this.loading = false
+  methods:{
+    async getCategory() {
+      this.loading = true;
+      const res = await this.$store.dispatch('products/getCategoryById', this.$route.params.id);
+      this.category = res[0];
+      this.loading = false;
     },
     getCategoryInfo(val){
+      if (val.children.length === 0 ) return;
       this.$router.push('/category/' + val.category_id)
-    }
+    },
   },
   mounted() {
-    this.getCategories()
+    this.getCategory();
   }
 }
 </script>
 
-<style scoped lang='scss'>
+<style lang='scss'>
 .v-data-table {
   tbody {
     tr {
