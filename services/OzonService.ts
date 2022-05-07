@@ -14,12 +14,12 @@ export default class OzonService {
      });
      return data.result;
   }
-
   static async addProduct(product: OzonProduct){
     const { data } = await Api.post('v2/product/import',{
       items: [product]
     });
   }
+
   static async getMyList(){
     const { data } = await Api.post('v2/product/list');
     return data.result.items;
@@ -29,4 +29,21 @@ export default class OzonService {
     const { data } = await Api.post('v2/category/tree',{ category_id: id });
     return data.result;
   }
+
+
+
+
+  static async getImportStatus(task_id: string){
+    const { data } = await Api.post('/v1/product/import/info',{ task_id });
+    return data.result;
+  }
+  static async importDigitalCodes(digital_codes: string[],product_id: number){
+    const { data } = await Api.post('/v1/product/upload_digital_codes',{ digital_codes,product_id });
+    return data.result;
+  }
+  static async getDigitalCodesStatus(task_id: number){
+    const { data } = await Api.post('/v1/product/upload_digital_codes/info',{ task_id });
+    return data.result;
+  }
+
 }

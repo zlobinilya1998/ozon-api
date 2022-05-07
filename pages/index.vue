@@ -7,8 +7,16 @@
       :loading='loading'
       :items-per-page='15'
       class='elevation-1'
-      @click:row='getCategoryInfo'
-    />
+    >
+      <template #item.title="{ item }">
+        <v-tooltip right>
+          <template #activator="{ on }">
+            <v-chip dark v-on="on" @click='getCategoryInfo(item)'>{{ item.title }}</v-chip>
+          </template>
+          <span>Нажмите, чтобы открыть подкатегории</span>
+        </v-tooltip>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
