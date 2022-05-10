@@ -1,79 +1,62 @@
 <template>
-  <div>
-    <h3 class='mb-2'>Все категории</h3>
-    <v-data-table
-      :headers='table.headers'
-      :items='categories'
-      :loading='loading'
-      :items-per-page='15'
-      class='elevation-1'
-    >
-      <template #item.title="{ item }">
-        <v-tooltip right>
-          <template #activator="{ on }">
-            <v-chip dark v-on="on" @click='getCategoryInfo(item)'>{{ item.title }}</v-chip>
-          </template>
-          <span>Нажмите, чтобы открыть подкатегории</span>
-        </v-tooltip>
-      </template>
-    </v-data-table>
-  </div>
+    <v-dialog v-model='dialog' persistent max-width='650'>
+      <v-card>
+        <v-card-title>Вход</v-card-title>
+        <div class='px-5'>
+          <v-text-field v-model='form.api_key' placeholder='Api-Key'/>
+          <v-text-field v-model='form.client_id' placeholder='Client-Id'/>
+        </div>
+        <v-card-actions>
+          <v-spacer/>
+          <v-slide-x-transition>
+            <div v-if='error' class='mx-2' @click='closeError' style='cursor: pointer;color: red'>Пользователь с такими данными не найден</div>
+          </v-slide-x-transition>
+          <v-btn @click='login(form)' :loading='loading'>Войти</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </template>
 
 <script>
-import Category from '~/components/Category'
+import OzonService from '../services/OzonService'
 
 export default {
-  components: { Category },
+  layout: 'login',
   data: () => ({
+    dialog: true,
     loading: false,
-    table: {
-      headers: [
-        {
-          text: 'Категория',
-          sortable: true,
-          value: 'title'
-        },
-        {
-          text: 'Индекс',
-          sortable: true,
-          value: 'category_id'
-        },
-        {
-          text: 'Подкатегории',
-          sortable: true,
-          value: 'children.length'
-        },
-      ]
-    }
-  }),
-  computed: {
-    categories() {
-      return this.$store.state.products.categories
-    }
-  },
-  methods: {
-    async getCategories() {
-      this.loading = true
-      await this.$store.dispatch('products/getCategories')
-      this.loading = false
+    error: false,
+    timer: null,
+    form: {
+      client_id: '',
+      api_key: ''
     },
-    getCategoryInfo(val){
-      this.$router.push('/category/' + val.category_id)
+  }),
+  methods: {
+    async login(form){
+      this.loading = true;
+      try {
+        await OzonService.login(form);
+        this.$store.commit('user/setCredentials', form)
+        await this.$router.push('/all-categories');
+      } catch (e) {
+        this.error = true
+      } finally {
+        this.loading = false;
+      }
+    },
+    closeError(){
+      this.error = false;
+      clearTimeout(this.timer)
     }
   },
-  mounted() {
-    this.getCategories()
-  }
+  watch: {
+    error(val){
+      if (val) {
+        this.timer = setTimeout(() => this.error = false, 5000)
+      }
+    }
+  },
 }
 </script>
 
-<style scoped lang='scss'>
-.v-data-table {
-  tbody {
-    tr {
-      cursor: pointer;
-    }
-  }
-}
-</style>

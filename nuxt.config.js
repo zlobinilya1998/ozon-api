@@ -4,14 +4,10 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  env: {
-      api_key: process.env.Ozon_api_key,
-      client_id: process.env.Ozon_client_id,
-  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s',
-    title: 'ozon-api',
+    titleTemplate: 'Личный кабинет',
+    title: 'Личный кабинет',
     htmlAttrs: {
       lang: 'en',
     },
@@ -43,7 +39,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
   ],
-
+  router: {},
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
